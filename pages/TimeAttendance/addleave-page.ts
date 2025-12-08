@@ -11,6 +11,7 @@ export class LeaveRequestPage {
   dateInput;
   draftButton;
   sendToApproverButton;
+  Validation;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +23,9 @@ export class LeaveRequestPage {
     this.dateInput = page.getByPlaceholder('Leave Start Date');
     this.draftButton = page.getByRole('button', { name: 'Draft' });
     this.sendToApproverButton = page.getByRole('button', { name: 'Send To Approver' });
+
+    //validation
+    this.Validation = page.locator('.ant-table-row').first();
   }
 
   // === Dynamic Locators ===
@@ -58,6 +62,7 @@ export class LeaveRequestPage {
   }
 
   async setDate(date: string) {
+    await this.page.waitForTimeout(2000);
     await this.dateInput.click({ clickCount: 3 });
     await this.dateInput.press('Backspace');
     await this.dateInput.fill(date);
