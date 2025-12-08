@@ -30,6 +30,10 @@ export default defineConfig({
     /* **PENTING: Set baseURL Anda di sini, diambil dari .env** */
     // Ini penting karena setup Anda menggunakan page.goto('/')
     baseURL: process.env.BASE_URL,
+    // PENTING: Ini akan otomatis ambil screenshot kapanpun test GAGAL (di baris manapun)
+    screenshot: 'only-on-failure',
+    // Opsional: Simpan video & trace untuk debugging lebih mudah
+    video: 'retain-on-failure',
 
     /* Lacak jejak (trace) saat percobaan ulang pertama yang gagal */
     trace: 'on-first-retry',
