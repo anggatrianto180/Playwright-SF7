@@ -2,25 +2,34 @@ import { test, expect } from '@playwright/test';
 import { LeaveRequestPage } from '../../pages/TimeAttendance/addleave-page';
 import { faker } from '@faker-js/faker';
 
-test.describe('Add Leave', () => {
-  test('Add Leave - Save as Draft', async ({ page }, testInfo) => {
-      const leave = new LeaveRequestPage(page);
-      const randomRemark = faker.lorem.sentence();
+test.describe('Add Leave Scenarios', () => {
+  let leave: LeaveRequestPage;
 
-      await leave.open();
+  test.beforeEach(async ({ page }) => {
+    leave = new LeaveRequestPage(page);
+    await leave.open();
+  })
+  
+  test('Add Leave - Save as Draft', async ({ page }, testInfo) => {
+      const testData = {
+        date: '17 Dec 2025',
+        leaveType: 'Annual Leave',
+        randomRemark : faker.lorem.sentence()
+      }
+
       await leave.clickAdd();
-      await leave.fillLeaveForm('18 Dec 2025', randomRemark, null, 'Annual Leave');
+      await leave.fillLeaveForm(testData.date, testData.randomRemark, null, testData.leaveType);
       await page.waitForTimeout(2000);
       await leave.saveAsDraft();
 
       //validation
-      const row = await leave.Validation;
-          await expect(row).toBeVisible();
-            await expect(row).toContainText('Draft');
-            await expect(row).toContainText('Gordon Enns'); 
-            await expect(row).toContainText(randomRemark);
-            await expect(row).toContainText('Annual Leave');
-            await expect(row).toContainText('18 Dec 2025');
+      const row = leave.Validation;
+      await expect(row).toBeVisible();
+      await expect(row).toContainText('Draft');
+      await expect(row).toContainText('Gordon Enns'); 
+      await expect(row).toContainText(testData.randomRemark);
+      await expect(row).toContainText(testData.leaveType);
+      await expect(row).toContainText(testData.date);
 
       // SCREENSHOT SUKSES (Nama File Dinamis)
       // Membersihkan nama test dari spasi agar jadi nama file yang valid
@@ -29,48 +38,50 @@ test.describe('Add Leave', () => {
   })
 
   test('Add Leave - Send to approve', async ({ page }, testInfo) => {
-      const leave = new LeaveRequestPage(page);
-
-      await leave.open();
+    const testData = {
+      date: '18 Dec 2025',
+      leaveType: 'Annual Leave',
+      randomRemark : faker.lorem.sentence()
+    }
       await leave.clickAdd();
-      await leave.fillLeaveForm('19 Dec 2025', 'Family Event', null, 'Annual Leave');
+      await leave.fillLeaveForm(testData.date, testData.randomRemark, null, testData.leaveType);
       await page.waitForTimeout(2000);
       await leave.sendToApprover();
 
-        //validation
-      const row = await leave.Validation;
-          await expect(row).toBeVisible();
-            await expect(row).toContainText('Gordon Enns'); 
-            await expect(row).toContainText('Family Event');
-            await expect(row).toContainText('Annual Leave');
-            await expect(row).toContainText('19 Dec 2025');
-            await expect(row).toContainText('Fully approved');
+      //validation
+      const row = leave.Validation;
+      await expect(row).toBeVisible();
+      await expect(row).toContainText('Gordon Enns'); 
+      await expect(row).toContainText(testData.randomRemark);
+      await expect(row).toContainText(testData.leaveType);
+      await expect(row).toContainText(testData.date);
+      await expect(row).toContainText('Fully Approved');
 
-      // SCREENSHOT SUKSES (Nama File Dinamis)
-      // Membersihkan nama test dari spasi agar jadi nama file yang valid
       const screenshotName = testInfo.title.replace(/\s+/g, '-').toLowerCase();
       await page.screenshot({ path: `Screenshoot/${screenshotName}.png`, fullPage: true });
   })
   
   test('Add Leave - For Another Employee', async ({ page }, testInfo) => {
-      const leave = new LeaveRequestPage(page);
-      const randomRemark = faker.lorem.sentence();
+    const testData = {
+      date: '16 Dec 2025',
+      leaveType: 'Annual Leave',
+      randomRemark : faker.lorem.sentence()
+    }
 
-      await leave.open();
       await leave.clickAdd();
       await leave.selectRequestFor('Aashka Valencia');
-      await leave.fillLeaveForm('30 Dec 2025', randomRemark, null, 'Annual Leave');
+      await leave.fillLeaveForm(testData.date, testData.randomRemark, null, testData.leaveType);
       await page.waitForTimeout(2000);
       await leave.saveAsDraft();
 
         //validation
-      const row = await leave.Validation;
-          await expect(row).toBeVisible();
-            await expect(row).toContainText('Draft');
-            await expect(row).toContainText('Aashka Valencia'); 
-            await expect(row).toContainText(randomRemark);
-            await expect(row).toContainText('Annual Leave');
-            await expect(row).toContainText('30 Dec 2025');
+      const row = leave.Validation;
+      await expect(row).toBeVisible();
+      await expect(row).toContainText('Draft');
+      await expect(row).toContainText('Aashka Valencia'); 
+      await expect(row).toContainText(testData.randomRemark);
+      await expect(row).toContainText(testData.leaveType);
+      await expect(row).toContainText(testData.date);
 
       const screenshotName = testInfo.title.replace(/\s+/g, '-').toLowerCase();
       await page.screenshot({ path: `Screenshoot/${screenshotName}.png`, fullPage: true });
