@@ -56,7 +56,8 @@ export class LeaveRequestPage {
     await this.employeeOption(employeeName).click();
   }
 
-  async selectLeaveType(optionAnnualLeave: string) {
+  async selectLeaveType(optionAnnualLeave: string | null) {
+    if (!optionAnnualLeave) return;
     await this.typeOfLeaveDropdown.click();
     await this.page.getByText(optionAnnualLeave).click();
   }
@@ -76,7 +77,7 @@ export class LeaveRequestPage {
     date: string,
     remark: string,
     requestFor: string | null,
-    annualLeave: string
+    annualLeave: string | null
   ) {
     await this.selectRequestFor(requestFor);
     await this.selectLeaveType(annualLeave);
@@ -98,5 +99,9 @@ export class LeaveRequestPage {
     await expect(
       this.page.getByText('Successfully Insert New Data, Your Request is Complete')
     ).toBeVisible({ timeout: 10000 });
+  }
+
+  async sendToApproveNegative() {
+    await this.sendToApproverButton.click();
   }
 }
