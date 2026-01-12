@@ -8,7 +8,8 @@ const AUTH_FILE = 'playwright/.auth/user.json';
 export default defineConfig({
   // Tentukan folder tempat tes Anda berada
   testDir: './tests',
-  
+
+
 
   /* Waktu maksimum untuk satu tes berjalan */
   timeout: 60 * 1000,
@@ -17,13 +18,27 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
 
   /* Coba lagi hanya pada CI */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
 
   /* Jumlah worker untuk berjalan paralel */
   workers: process.env.CI ? 1 : 1,
 
   /* Reporter */
-  reporter: 'html',
+  /* Reporter */
+  reporter: [
+    ['html'],
+    ['list'], // Agar log tetap muncul di terminal VS Code
+
+    // --- MONOCART YANG BENAR ---
+    ['monocart-reporter', {
+      name: "Laporan Automation SF7",
+      outputFile: './test-results/report.html',
+      // Hapus inline: true karena kita sudah pakai ZIP folder
+    }],
+
+    // --- TELEGRAM REPORTER ---
+    ['./telegram-reporter.ts']
+  ],
 
   /* Konfigurasi Global untuk semua Proyek */
   use: {
@@ -31,12 +46,15 @@ export default defineConfig({
     // Ini penting karena setup Anda menggunakan page.goto('/')
     baseURL: process.env.BASE_URL,
     // PENTING: Ini akan otomatis ambil screenshot kapanpun test GAGAL (di baris manapun)
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
     // Opsional: Simpan video & trace untuk debugging lebih mudah
     video: 'retain-on-failure',
 
     /* Lacak jejak (trace) saat percobaan ulang pertama yang gagal */
     trace: 'on-first-retry',
+    launchOptions: {
+      args: ["--start-maximized"]
+    }
   },
 
   /* ================================================================== */
@@ -58,11 +76,11 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        
+
         // **KUNCI:** Gunakan 'storageState' yang telah dibuat oleh proyek 'setup'
         storageState: AUTH_FILE,
       },
-      
+
       // **KUNCI:** Tentukan bahwa proyek ini BERGANTUNG pada 'setup'
       // Ini memastikan 'setup' berjalan SEBELUM proyek 'chromium'
       dependencies: ['setup'],
