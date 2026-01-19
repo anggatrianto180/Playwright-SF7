@@ -42,6 +42,19 @@ export default defineConfig({
 
   /* Konfigurasi Global untuk semua Proyek */
   use: {
+    launchOptions: {
+      // Tambahkan argumen ini untuk mengatasi masalah di Docker
+      args: [
+        "--start-maximized",       // Biar layar lebar
+        "--disable-dev-shm-usage", // ✅ WAJIB: Atasi crash memori di Docker
+        "--no-sandbox",            // ✅ WAJIB: Izin root di Docker
+        "--disable-gpu",           // ✅ WAJIB: Docker biasanya gak punya GPU
+        "--disable-setuid-sandbox"
+      ],
+    },
+    //time for timezone
+    viewport: { width: 1920, height: 1080 },
+    timezoneId: 'Asia/Jakarta',
     /* **PENTING: Set baseURL Anda di sini, diambil dari .env** */
     // Ini penting karena setup Anda menggunakan page.goto('/')
     baseURL: process.env.BASE_URL,
@@ -52,9 +65,6 @@ export default defineConfig({
 
     /* Lacak jejak (trace) saat percobaan ulang pertama yang gagal */
     trace: 'on-first-retry',
-    launchOptions: {
-      args: ["--start-maximized"]
-    }
   },
 
   /* ================================================================== */
