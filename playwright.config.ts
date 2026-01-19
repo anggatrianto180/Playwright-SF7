@@ -64,7 +64,7 @@ export default defineConfig({
     video: 'retain-on-failure',
 
     /* Lacak jejak (trace) saat percobaan ulang pertama yang gagal */
-    trace: 'on-first-retry'
+    trace: 'on-first-retry',
   },
 
   /* ================================================================== */
