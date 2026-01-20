@@ -12,8 +12,8 @@ test.describe('Add Training Course', () => {
     test.describe('Positive Scenarios', () => {
         test('Add Training Course', async ({ page }, testInfo) => {
             const testData = {
-                courseCode: 'TC001',
-                courseName: 'Training Course Periode 7',
+                courseCode: 'TC002',
+                courseName: 'Training Course Periode 8',
                 trainingCategory: 'Accounting and Finance',
                 trainingType: 'Coaching',
                 courseDescription: 'Test Description',
@@ -34,6 +34,7 @@ test.describe('Add Training Course', () => {
 
             //Validation
             await training.changeToTable(testData.courseCode);
+
             const row = training.Validation;
             await expect(row).toBeVisible();
             await expect(row).toContainText(testData.courseName);
