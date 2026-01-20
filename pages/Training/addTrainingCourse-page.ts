@@ -158,5 +158,6 @@ export class AddTrainingCourse {
         await this.page.locator("//span[@aria-label='unordered-list']//*[name()='svg']").click();
         await this.page.getByRole('textbox', { name: 'Training Course' }).fill(code);
         await this.page.getByRole('textbox', { name: 'Training Course' }).press("Enter");
+        await expect(this.page.locator('.ant-spin-spinning')).toBeHidden({ timeout: 15000 });
     }
 }
