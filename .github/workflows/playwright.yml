@@ -1,25 +1,41 @@
-name: Playwright Tests
-# Trigger diubah menjadi workflow_dispatch agar tidak berjalan otomatis
+name: Playwright Training Tests
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Memungkinkan trigger manual dari VS Code Terminal
 
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Menggunakan Linux yang stabil untuk Docker
+    
+    env:
+      # Mapping Secret ke Environment Variable agar terbaca oleh Playwright
+      PASSWORD_TESTING: ${{ secrets.PASSWORD_TESTING }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
     steps:
     - uses: actions/checkout@v4
+
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+
     - name: Install dependencies
-      run: npm ci
+      run: npm install
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+
+    - name: Run Playwright tests (Folder Training Only)
+      # Kita arahkan langsung ke folder tests/Training
+      run: npx playwright test tests/Training
+
+    - name: Upload Report Artifact (Jika Gagal)
+      if: always()
+      uses: actions/upload-artifact@v4
       with:
         name: playwright-report
         path: playwright-report/

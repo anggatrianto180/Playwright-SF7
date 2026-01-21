@@ -18,10 +18,10 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
 
   /* Coba lagi hanya pada CI */
-  retries: process.env.CI ? 2 : 1,
+  retries: process.env.CI ? 2 : 0,
 
   /* Jumlah worker untuk berjalan paralel */
-  workers: process.env.CI ? 1 : 1,
+  workers: process.env.CI ? 1 : undefined,
 
   /* Reporter */
   /* Reporter */
