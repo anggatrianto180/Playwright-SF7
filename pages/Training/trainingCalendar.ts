@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
 
-export class TrainingCalendar {
+export class trainingCalendar {
     private page: Page;
 
     //Locators

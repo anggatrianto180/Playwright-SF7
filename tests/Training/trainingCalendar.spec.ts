@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { TrainingCalendar } from '../../pages/Training/trainingCalendar';
+import { trainingCalendar } from '../../pages/Training/trainingCalendar';
 
 test.describe('Training Calendar', () => {
-    let training: TrainingCalendar;
+    let training: trainingCalendar;
 
 
     test.beforeEach(async ({ page }) => {
-        training = new TrainingCalendar(page);
+        training = new trainingCalendar(page);
         await training.open();
     })
 
