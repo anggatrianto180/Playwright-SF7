@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { AddTrainingRequest } from '../../pages/Training/addTrainingRequest';
+import { AddTrainingRequest } from '../../../pages/Training/Training Request/addTrainingRequest';
 import { beforeEach, describe } from 'node:test';
 
 test.describe('Add Training Request', () => {

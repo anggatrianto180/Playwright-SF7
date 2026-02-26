@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { AddTrainingRoadmap } from '../../pages/Training/addTrainingRoadmap';
+import { AddTrainingRoadmap } from '../../../pages/Training/Training Roadmap/addTrainingRoadmap';
 
 test.describe('Add Roadmap training', () => {
     let training: AddTrainingRoadmap;
